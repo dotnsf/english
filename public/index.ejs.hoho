@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>English</title>
+<style>
+html,body { height:100%; }
+</style>
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+
+// 音声バッファ時間(音声録音開始前時間)
+// この値が音声録音開始イベント前の音声録音時間
+var beforeSecond = 0.2;
+// ここに録音用音声データを保存
+var recentReceivedVoice = null;
+// 音声データ履歴
+var audioHist = new Array(20);
+ 
+// ブラウザにより異なるAPIをそれぞれ統一
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||   navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  window.AudioContext = window.AudioContext || window.webkitAudioContext ||       window.mozAudioContext || window.msAudioContext;
+ 
+//サンプリングレート、バッファサイズ等
+var audioContext = new AudioContext();
+var sampleRate = audioContext.sampleRate;
+var bufferSize = 4096;
+var bufferArrayLength = sampleRate / bufferSize * beforeSecond;
+// 初期化用の空のデータ用意
+var nosound = new Float32Array(bufferSize);
+ 
+// 音声録音開始前時間分のバッファ準備
+function initAudioData() {
+}
+ 
+//毎音声処理
+function onAudioProcess(e) {
+    // 音声データを取得
+    var input = e.inputBuffer.getChannelData(0);
+ 
+    var bufferData = new Float32Array(bufferSize);
+    // 音声データをバッファに書き込む
+    for (var i = 0; i < bufferSize; i++) {
+        bufferData[i] = input[i];
+    }
+    
+    audioHist.shift();
+    audioHist.push( bufferData );
+}
+ 
+// 音声処理開始
+function initialize() {
+    navigator.getUserMedia(
+    // audio:trueで音声取得を有効にする
+        {audio: true },
+        function (stream) {
+            // 音声処理ノード
+            // var javascriptnode = audioContext.createJavaScriptNode(bufferSize, 1, 1);  // 入力チャンネル数は1にしている
+            var javascriptnode = audioContext.createScriptProcessor(bufferSize, 1, 1);  // メソッド名がcreateJavaScriptNodeから変更された
+            var mediastreamsource = audioContext.createMediaStreamSource(stream);
+            window.dotnsf_hack_for_mozzila = mediastreamsource;  //. https://support.mozilla.org/en-US/questions/984179
+            mediastreamsource.connect(javascriptnode);
+            javascriptnode.onaudioprocess = onAudioProcess;
+            javascriptnode.connect(audioContext.destination);
+        },function (e) {
+            console.log(e);
+        });
+}
+
+//. 初期化
+function connect(){
+	for( var i = 0; i < audioHist.length; i ++ ){
+		audioHist[i] = 0;
+	}
+	
+	initAudioData();
+	initialize();
+}
+</script>
+</head>
+<body onload="connect()">
+<div style="width:100%;height:100%;">
+</div>
+</body>
+</html>
+
