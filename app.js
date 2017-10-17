@@ -28,27 +28,30 @@ app.get( '/', function( req, res ){
 app.post( '/s2t', function( req, res ){
   //. req.file.path に audio/wav
   var filepath = req.file.path;
-  var stream = fs.createReadStream( filepath );
-  stream.on( 'data', function( chunk ){
-  });
-  stream.on( 'end', function(){
-    var params = {
-      audio: stream,
-      content_type: 'audio/wav'  //req.file.type
-    };
 
-    speech_to_text.recognize( params, function( error, result ){
-      fs.unlink( filepath, function( err ){} );
-console.log( error );
+  var params = {
+    audio: fs.createReadStream( filepath ),
+    content_type: 'audio/wav',
+    timestamps: true
+  };
+  speech_to_text.recognize( params, function( error, result ){
+    if( error ){
+      res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
+      res.end();
+    }else{
 console.log( result );
-      if( error ){
-        res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
-        res.end();
-      }else{
-        res.write( JSON.stringify( { status: 'ok', result: result }, 2, null ) );
-        res.end();
+      var transcript = '';
+      for( var i = 0; i < 1 /*result.results.length*/; i ++ ){
+        var r = result.results[i];
+        if( r && r.alternatives ){
+          var t = result.results[i].alternatives[0].transcript;
+          transcript += t;
+        }
       }
-    });
+      res.write( JSON.stringify( { status: 'ok', result: transcript }, 2, null ) );
+      res.end();
+    }
+    fs.unlink( filepath, function(e){} );
   });
 });
 

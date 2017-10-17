@@ -70,7 +70,9 @@
 				processData: false,
 				contentType: false,
 			}).done( function( result ){
-				console.log( result );
+                var data = JSON.parse( result );
+				console.log( data.result );
+                $('#recognizedresult').html( data.result );
 
 /*
 			var url = URL.createObjectURL(blob);
