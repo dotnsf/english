@@ -99,16 +99,21 @@
 
     function speechExamplification( button ){
       var englishtext = $('#englishtext').html();
+/*
       $.ajax({
         type: 'POST',
         url: './t2s',
         data: { text: englishtext }
       }).done( function( speech ){
         //console.log( speech );
-        var blob = new Blob( [speech], { type: 'audio/wav' } );
-        var url = URL.createObjectURL( blob );
-        $('#englishspeech').attr( 'src', url );
+//        var blob = new Blob( [speech], { type: 'audio/wav' } );
+//        var url = URL.createObjectURL( blob );
+//        $('#englishspeech').attr( 'src', url );
+
+//        $('#englishspeech').attr( 'src', 'data:audio/wav;base64,'+speech );
       });
+*/
+        $('#englishspeech').attr( 'src', './t2s?text=' + englishtext );
     }
 
 	window.onload = function init(){

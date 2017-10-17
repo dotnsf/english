@@ -92,9 +92,9 @@ console.log( JSON.stringify(result,2,null) );
   });
 });
 
-app.post( '/t2s', function( req, res ){
+app.get( '/t2s', function( req, res ){
   //. https://www.ibm.com/watson/developercloud/text-to-speech/api/v1/?node#synthesize_audio
-  var text = req.body.text;
+  var text = req.query.text;
 
   var params = {
     text: text,
@@ -107,7 +107,6 @@ app.post( '/t2s', function( req, res ){
     res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
     res.end();
   }).on( 'response', function( response1 ){
-    //console.log( response1 );
     res.writeHead( 200, { 'Content-Type': 'audio/wav' } );
   }).pipe( res );
 });
