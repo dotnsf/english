@@ -40,13 +40,49 @@ app.post( '/s2t', function( req, res ){
       res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
       res.end();
     }else{
-console.log( result );
+console.log( JSON.stringify(result,2,null) );
+/*
+{
+ "results":[
+  {
+   "alternatives":[
+    {
+     "timestamps":[
+      ["it",0.04,0.37],
+      ["was",0.37,0.57],
+      ["one",0.57,0.77],
+      ["of",0.77,0.83],
+      ["the",0.83,0.9],
+      ["things",0.9,1.08]
+     ],
+     "confidence":0.475,
+     "transcript":"it was one of the things "
+    }
+   ],
+   "final":true
+  },
+  {
+   "alternatives":[
+    {
+     "timestamps":[
+      ["Norma",2.1,2.63]
+     ],
+     "confidence":0.099,
+     "transcript":"Norma "
+    }
+   ],
+   "final":true
+  }
+ ],
+ "result_index":0
+}
+*/
       var transcript = '';
-      for( var i = 0; i < 1 /*result.results.length*/; i ++ ){
+      for( var i = 0; i < result.results.length; i ++ ){
         var r = result.results[i];
         if( r && r.alternatives ){
           var t = result.results[i].alternatives[0].transcript;
-          transcript += t;
+          transcript += ( " " + t );
         }
       }
       res.write( JSON.stringify( { status: 'ok', result: transcript }, 2, null ) );
