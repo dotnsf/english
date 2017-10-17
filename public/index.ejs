@@ -23,6 +23,8 @@
 	<h3>模範</h3>
 	<ul id="englishspeech"></ul>
 	
+	<button onclick="speechExamplification(this);">模範</button>
+
 	<h3>Status</h3>
 	<pre id="log"></pre>
 
@@ -92,6 +94,19 @@
 			});
 		});
 	}
+
+    function speechExamplification( button ){
+      var englishtext = $('#englishtext').html();
+      $.ajax({
+        type: 'POST',
+        url: './t2s',
+        //processData: false,
+        //contentType: false,
+        data: { text: englishtext }
+      }).done( function( result ){
+        console.log( result );
+      });
+    }
 
 	window.onload = function init(){
 		try{

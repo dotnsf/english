@@ -26,6 +26,7 @@ app.get( '/', function( req, res ){
 });
 
 app.post( '/s2t', function( req, res ){
+  //. https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/?node#recognize_sessionless_nonmp12
   //. req.file.path に audio/wav
   var filepath = req.file.path;
 
@@ -55,6 +56,27 @@ console.log( result );
   });
 });
 
+app.post( '/t2s', function( req, res ){
+  //. https://www.ibm.com/watson/developercloud/text-to-speech/api/v1/?node#synthesize_audio
+  var text = req.body.text;
+
+  var params = {
+    text: text,
+    accept: 'audio/wav',
+    voice: 'en-US_AllisonVoice'
+  };
+  var transcript = text_to_speech.synthesize( params );
+  transcript.on( 'error', function( error ){
+    res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
+    res.end();
+  });
+  transcript.on( 'response', function( response1 ){
+    res.writeHead( 200, { 'Content-Type': 'audio/wav', 'Content-Length': transcript.size } );
+  });
+
+  transcript.pipe( res );
+
+});
 
 var port = appEnv.port || 3000;
 app.listen( port );
