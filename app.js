@@ -65,17 +65,15 @@ app.post( '/t2s', function( req, res ){
     accept: 'audio/wav',
     voice: 'en-US_AllisonVoice'
   };
-  var transcript = text_to_speech.synthesize( params );
-  transcript.on( 'error', function( error ){
+
+  text_to_speech.synthesize( params )
+  .on( 'error', function( error ){
     res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
     res.end();
-  });
-  transcript.on( 'response', function( response1 ){
-    res.writeHead( 200, { 'Content-Type': 'audio/wav', 'Content-Length': transcript.size } );
-  });
-
-  transcript.pipe( res );
-
+  }).on( 'response', function( response1 ){
+    //console.log( response1 );
+    res.writeHead( 200, { 'Content-Type': 'audio/wav' } );
+  }).pipe( res );
 });
 
 var port = appEnv.port || 3000;
