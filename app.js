@@ -20,8 +20,16 @@ app.use( bodyParser.json() );
 app.use( express.static( __dirname + '/public' ) );
 
 app.get( '/', function( req, res ){
+  var questions = [
+    'Good morning.',
+    'This is a pen.',
+    'How have you been?',
+    'Wow. That sounds interesting!',
+    'I prefer coffee.'
+  ];
+
   var template = fs.readFileSync( __dirname + '/public/index.ejs', 'utf-8' );
-  res.write( ejs.render( template, {} ) );
+  res.write( ejs.render( template, { questions: questions} ) );
   res.end();
 });
 
@@ -40,7 +48,7 @@ app.post( '/s2t', function( req, res ){
       res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
       res.end();
     }else{
-console.log( JSON.stringify(result,2,null) );
+      //console.log( JSON.stringify(result,2,null) );
 /*
 {
  "results":[
@@ -109,6 +117,49 @@ app.get( '/t2s', function( req, res ){
   }).on( 'response', function( response1 ){
     res.writeHead( 200, { 'Content-Type': 'audio/wav' } );
   }).pipe( res );
+});
+
+app.post( '/compare', function( req, res ){
+  var question = req.body.question;
+  var answer = req.body.answer;
+  var score = 0.0;
+
+  var qs = question.split( ' ' );
+  var as = answer.split( ' ' );
+
+  //. question に使われている単語のどれだけを認識させることができたか？ 
+  var q_count = 0;
+  for( var i = 0; i < qs.length; i ++ ){
+    var b = false;
+    for( var j = 0; j < as.length && !b; j ++ ){
+      b = ( as[j].toLowerCase() == qs[i].toLowerCase() );
+    }
+    if( b ){
+      q_count ++;
+    }
+  }
+  score = 100.0 * q_count / qs.length;
+
+  //. answer に使われている単語のどれだけが誤認識だったか？
+  var a_count = 0;
+  for( var i = 0; i < as.length; i ++ ){
+    var b = false;
+    for( var j = 0; j < qs.length && !b; j ++ ){
+      b = ( as[i].toLowerCase() == qs[j].toLowerCase() );
+    }
+    if( !b ){
+      a_count ++;
+    }
+  }
+  score -= 100.0 * a_count / as.length;
+
+  console.log( 'question = ' + question + ', answer = ' + answer );
+  console.log( 'q_count = ' + q_count + ', qs.length = ' + qs.length );
+  console.log( 'a_count = ' + a_count + ', as.length = ' + as.length );
+  console.log( ' score = ' + score );
+
+  res.write( JSON.stringify( { status: 'ok': score: score }, 2, null ) );
+  res.end();
 });
 
 var port = appEnv.port || 3000;

@@ -9,10 +9,22 @@
 		ul { list-style: none; }
 		#recordingslist audio { display: block; margin-bottom: 10px; }
 	</style>
+<script>
+var questions = [
+  "<%= questions[0] %>"
+<% for( var i = 1; i < questions.length; i ++ ){ %>
+  ,"<%= questions[i] %>"
+<% } %>
+];
+var q_idx = 0;
+$(function(){
+  $('#englishtext').html( questions[q_idx] );
+});
+</script>
 </head>
 <body>
 	<h3>出題</h3>
-	<ul id="englishtext">This is a pen.</ul>
+	<ul id="englishtext"></ul>
 	
 	<button onclick="startRecording(this);">発音</button>
 	<button onclick="stopRecording(this);" disabled>停止</button>
@@ -106,11 +118,11 @@
         data: { text: englishtext }
       }).done( function( speech ){
         //console.log( speech );
-//        var blob = new Blob( [speech], { type: 'audio/wav' } );
-//        var url = URL.createObjectURL( blob );
-//        $('#englishspeech').attr( 'src', url );
+        var blob = new Blob( [speech], { type: 'audio/wav' } );
+        var url = URL.createObjectURL( blob );
+        $('#englishspeech').attr( 'src', url );
 
-//        $('#englishspeech').attr( 'src', 'data:audio/wav;base64,'+speech );
+        $('#englishspeech').attr( 'src', 'data:audio/wav;base64,'+speech );
       });
 */
         $('#englishspeech').attr( 'src', './t2s?text=' + englishtext );
