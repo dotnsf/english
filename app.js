@@ -103,11 +103,12 @@ app.post( '/s2t', function( req, res ){
 app.get( '/t2s', function( req, res ){
   //. https://www.ibm.com/watson/developercloud/text-to-speech/api/v1/?node#synthesize_audio
   var text = req.query.text;
+  var voice = req.query.voice;
 
   var params = {
     text: text,
     accept: 'audio/wav',
-    voice: 'en-US_AllisonVoice'
+    voice: voice
   };
 
   text_to_speech.synthesize( params )

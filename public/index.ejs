@@ -36,7 +36,8 @@ $(function(){
 	
 	<h3>模範</h3>
 	<ul>
-          <audio id="englishspeech" src="" controls autoplay></audio>
+          <li><select id="voice"><option value="en-US_AllisonVoice" selected>Allison</option><option value="en-US_LisaVoice">Lisa</option><option value="en-US_MichaelVoice">Michael</option></select></li>
+          <li><audio id="englishspeech" src="" controls autoplay></audio></li>
         </ul>
 	
 	<button id='speech' onclick="speechExamplification(this);" disabled>模範</button>
@@ -133,11 +134,12 @@ $(function(){
 
     function speechExamplification( button ){
       var englishtext = $('#englishtext').html();
+      var voice = $('#voice').val();
 /*
       $.ajax({
         type: 'POST',
         url: './t2s',
-        data: { text: englishtext }
+        data: { text: englishtext, voice: voice }
       }).done( function( speech ){
         //console.log( speech );
         var blob = new Blob( [speech], { type: 'audio/wav' } );
@@ -147,7 +149,7 @@ $(function(){
         $('#englishspeech').attr( 'src', 'data:audio/wav;base64,'+speech );
       });
 */
-        $('#englishspeech').attr( 'src', './t2s?text=' + englishtext );
+        $('#englishspeech').attr( 'src', './t2s?text=' + englishtext + '&voice=' + voice );
     }
 
 	window.onload = function init(){
