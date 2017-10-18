@@ -151,14 +151,14 @@ app.post( '/compare', function( req, res ){
       a_count ++;
     }
   }
-  score -= 100.0 * a_count / as.length;
+  score -= score * a_count / as.length;
 
   console.log( 'question = ' + question + ', answer = ' + answer );
   console.log( 'q_count = ' + q_count + ', qs.length = ' + qs.length );
   console.log( 'a_count = ' + a_count + ', as.length = ' + as.length );
   console.log( ' score = ' + score );
 
-  res.write( JSON.stringify( { status: 'ok': score: score }, 2, null ) );
+  res.write( JSON.stringify( { status: 'ok', score: score }, 2, null ) );
   res.end();
 });
 
