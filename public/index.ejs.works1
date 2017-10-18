@@ -19,59 +19,28 @@ var questions = [
 var q_idx = 0;
 $(function(){
   $('#englishtext').html( questions[q_idx] );
-
-  $('#voice').change( function(){
-    var voice = $(this).val();
-    var tmp1 = voice.split( '_' );
-    var tmp2 = tmp1[1].indexOf( 'Voice' );
-    var voicer = tmp1[1].substring( 0, tmp2 );
-    $('#voicer').attr( 'src', './' + voicer + '.png' );
-  });
 });
 </script>
-<style>
-.balloon{
-  position: relative;
-  padding: 20px;
-  background-color: #fff3ad;
-  display: inline-block;     /* 横幅を自動で変更 */
-  border-radius: 10px;
-}
-
-.balloon::before{
-  content: '';
-  position: absolute;
-  display: block;
-  width: 0;
-  height: 0;
-  left: 20px;
-  bottom: -15px;
-  border-top: 15px solid #fff3ad;
-  border-right: 15px solid transparent;
-  border-left: 15px solid transparent;
-}
-</style>
-
 </head>
 <body>
-	<div id="englishtext" class="balloon"></div>
-        <div id="voicerdiv" onclick="speechExamplification(this);" ><img id="voicer" src="./Allison.png" height="200px"></div>
-        <ul><li><audio id="englishspeech" src="" controls autoplay></audio></li></ul>
-        <ul><li><select id="voice"><option value="en-US_AllisonVoice" selected>Allison</option><option value="en-US_LisaVoice">Lisa</option><option value="en-US_MichaelVoice">Michael</option></select></li></ul>
+	<h3>出題</h3>
+	<ul id="englishtext"></ul>
 	
 	<button onclick="nextQuestion(this);">次の問題</button>
 	<button id='recordingstart' onclick="startRecording(this);">発音</button>
 	<button id='recordingstop' onclick="stopRecording(this);" disabled>停止</button>
-
-        <hr/>
 	
 	<h3>認識結果</h3>
-        <table border="1">
-        <tr><td>認識したテキスト</td>
-	<td id="recognizedresult">&nbsp;</td></tr>
-        <tr><td>スコア</td>
-	<td id="score">&nbsp;</td></tr>
-        </table>
+	<ul id="recognizedresult"></ul>
+	<ul id="score"></ul>
+	
+	<h3>模範</h3>
+	<ul>
+          <li><select id="voice"><option value="en-US_AllisonVoice" selected>Allison</option><option value="en-US_LisaVoice">Lisa</option><option value="en-US_MichaelVoice">Michael</option></select></li>
+          <li><audio id="englishspeech" src="" controls autoplay></audio></li>
+        </ul>
+	
+	<button id='speech' onclick="speechExamplification(this);" disabled>模範</button>
 
 	<h3>Status</h3>
 	<pre id="log"></pre>
@@ -113,8 +82,6 @@ $(function(){
                 q_idx ++;
                 if( q_idx == questions.length ){ q_idx = 0; }
                 $('#englishtext').html( questions[q_idx] );
-                $('#recognizedresult').html( '&nbsp;' );
-                $('#score').html( '&nbsp;' );
 
                 $('#recordingstart').attr( 'disabled', false );
                 $('#recordingstop').attr( 'disabled', true );
