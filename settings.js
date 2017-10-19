@@ -3,6 +3,7 @@ exports.s2t_username = 'username';
 exports.s2t_password = 'password';
 exports.t2s_username = 'username';
 exports.t2s_password = 'password';
+//exports.lang = 'ja';
 exports.questions = {
   'en': [
     'Good morning.',
@@ -10,6 +11,13 @@ exports.questions = {
     'How have you been?',
     'Wow. That sounds interesting!',
     'I prefer coffee.'
+  ],
+  'de': [
+    'Hallo.',
+    'Ich liebe dich.',
+    'Es machte mich nervos.',
+    'Wir mogen Bier!',
+    'Wie kann ich nach Berlin kommen?'
   ],
   'ja': [
     'おはようございます',
