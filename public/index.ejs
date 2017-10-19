@@ -80,6 +80,35 @@ $(function(){
   border-right: 15px solid transparent;
   border-left: 15px solid transparent;
 }
+
+/* 吹き出し本体 */
+.balloon1{
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #0888ff;
+  margin-left: 110px;          /* 左に余白を設ける */
+}
+/* 画像 - 絶対配置で左上に配置 */
+.balloon1 .icon{
+  position: absolute;
+  left: -110px;
+  top: 0;
+}
+/* 三角アイコン */
+.balloon1::before{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: -15px;
+  top: 20px;
+  border-right: 15px solid #0888ff;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
 </style>
 
 </head>
@@ -96,7 +125,12 @@ $(function(){
         <hr/>
 	
 	<h3>認識結果</h3>
-	<ul id="recognizedresult">&nbsp;</ul>
+        <table border="0">
+        <tr>
+        <td><img src="./man.png"/></td>
+	<td id="recognizedresult">&nbsp;</td>
+        </tr>
+        </table>
 
 	<h3>Status</h3>
 	<pre id="log"></pre>
@@ -139,6 +173,7 @@ $(function(){
                 if( q_idx == questions.length ){ q_idx = 0; }
                 $('#englishtext').html( questions[q_idx] );
                 $('#recognizedresult').html( '&nbsp;' );
+                $('#recognizedresult').removeClass( 'balloon1' );
                 $('#score').html( '&nbsp;' );
 
                 $('#recordingstart').attr( 'disabled', false );
@@ -160,7 +195,8 @@ $(function(){
 			}).done( function( result ){
                                 var data = JSON.parse( result );
                                 console.log( data.result );
-                                $('#recognizedresult').html( '"' + data.result + '"' );
+                                $('#recognizedresult').html( data.result );
+                                $('#recognizedresult').addClass( 'balloon1' );
                                 $('#speech').attr( 'disabled', false );
 
 /*
