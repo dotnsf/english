@@ -3,6 +3,13 @@ exports.s2t_username = 'username';
 exports.s2t_password = 'password';
 exports.t2s_username = 'username';
 exports.t2s_password = 'password';
+exports.questions = [
+  'Good morning.',
+  'This is a pen.',
+  'How have you been?',
+  'Wow. That sounds interesting!',
+  'I prefer coffee.'
+];
 
 if( process.env.VCAP_SERVICES ){
   var VCAP_SERVICES = JSON.parse( process.env.VCAP_SERVICES );

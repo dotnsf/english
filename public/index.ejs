@@ -54,13 +54,12 @@ $(function(){
 
 </head>
 <body>
-	<div id="englishtext" class="balloon"></div>
+	<div id="englishtext" class="balloon" onclick="nextQuestion(this);"></div>
         <div id="voicerdiv" onclick="speechExamplification(this);" ><img id="voicer" src="./Allison.png" height="200px"></div>
-        <ul><li><audio id="englishspeech" src="" controls autoplay></audio></li></ul>
         <ul><li><select id="voice"><option value="en-US_AllisonVoice" selected>Allison</option><option value="en-US_LisaVoice">Lisa</option><option value="en-US_MichaelVoice">Michael</option></select></li></ul>
+        <ul style="display:none;"><li><audio id="englishspeech" src="" controls autoplay></audio></li></ul>
 	
-	<button onclick="nextQuestion(this);">次の問題</button>
-	<button id='recordingstart' onclick="startRecording(this);">発音</button>
+	<button id='recordingstart' onclick="startRecording(this);">録音スタート</button>
 	<button id='recordingstop' onclick="stopRecording(this);" disabled>停止</button>
 
         <hr/>

@@ -20,13 +20,7 @@ app.use( bodyParser.json() );
 app.use( express.static( __dirname + '/public' ) );
 
 app.get( '/', function( req, res ){
-  var questions = [
-    'Good morning.',
-    'This is a pen.',
-    'How have you been?',
-    'Wow. That sounds interesting!',
-    'I prefer coffee.'
-  ];
+  var questions = settings.questions;
 
   var template = fs.readFileSync( __dirname + '/public/index.ejs', 'utf-8' );
   res.write( ejs.render( template, { questions: questions} ) );
