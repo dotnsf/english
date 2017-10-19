@@ -125,9 +125,17 @@ app.post( '/compare', function( req, res ){
   //. question に使われている単語のどれだけを認識させることができたか？ 
   var q_count = 0;
   for( var i = 0; i < qs.length; i ++ ){
+    var q = as[i];
+    if( q.endsWith( '.' ) || q.endsWith( '!' ) || q.endsWith( '?' ) ){
+      q = q.substring( 0, q.length - 1 );
+    }
     var b = false;
     for( var j = 0; j < as.length && !b; j ++ ){
-      b = ( as[j].toLowerCase() == qs[i].toLowerCase() );
+      var a = as[j];
+      if( a.endsWith( '.' ) || a.endsWith( '!' ) || a.endsWith( '?' ) ){
+        a = a.substring( 0, a.length - 1 );
+      }
+      b = ( a.toLowerCase() == q.toLowerCase() );
     }
     if( b ){
       q_count ++;
@@ -138,9 +146,17 @@ app.post( '/compare', function( req, res ){
   //. answer に使われている単語のどれだけが誤認識だったか？
   var a_count = 0;
   for( var i = 0; i < as.length; i ++ ){
+    var a = as[i];
+    if( a.endsWith( '.' ) || a.endsWith( '!' ) || a.endsWith( '?' ) ){
+      a = a.substring( 0, a.length - 1 );
+    }
     var b = false;
     for( var j = 0; j < qs.length && !b; j ++ ){
-      b = ( as[i].toLowerCase() == qs[j].toLowerCase() );
+      var q = as[j];
+      if( q.endsWith( '.' ) || q.endsWith( '!' ) || q.endsWith( '?' ) ){
+        q = q.substring( 0, q.length - 1 );
+      }
+      b = ( a.toLowerCase() == q.toLowerCase() );
     }
     if( !b ){
       a_count ++;
