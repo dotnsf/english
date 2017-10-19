@@ -3,13 +3,14 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>English</title>
+	<title>Language Pronounce</title>
 	<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
 	<style type='text/css'>
 		ul { list-style: none; }
 		#recordingslist audio { display: block; margin-bottom: 10px; }
 	</style>
 <script>
+var lang = "<%= lang %>";
 var questions = [
   "<%= questions[0] %>"
 <% for( var i = 1; i < questions.length; i ++ ){ %>
@@ -26,6 +27,35 @@ $(function(){
     var tmp2 = tmp1[1].indexOf( 'Voice' );
     var voicer = tmp1[1].substring( 0, tmp2 );
     $('#voicer').attr( 'src', './' + voicer + '.png' );
+
+    var desc = $('#voice option:selected').attr( 'desc' );
+    $('#voicer').attr( 'title', desc );
+  });
+
+  $.ajax({
+    type: 'GET',
+    url: './voices'
+  }).done( function( result ){
+    var data = JSON.parse( result );
+    if( data.status && data.voices ){
+      var voices = data.voices;
+      for( var i = 0; i < voices.voices.length; i ++ ){
+        var voice = voices.voices[i];
+        var v_name = voice.name;
+
+        var tmp1 = v_name.split( '_' );
+        var tmp2 = tmp1[0].split( '-' );
+        var v_lang = tmp2[0];
+        if( v_lang == lang ){
+          var v_desc = voice.description;
+          var tmp3 = tmp1[1].indexOf( 'Voice' );
+          var voicer = tmp1[1].substring( 0, tmp3 );
+          $('#voice').append( '<option lang="' + v_lang + '" desc="' + v_desc + '" value="' + v_name + '">' + voicer + '</option>' );
+        }
+      }
+
+      $('#voice').change();
+    }
   });
 });
 </script>
@@ -55,8 +85,9 @@ $(function(){
 </head>
 <body>
 	<div id="englishtext" class="balloon" onclick="nextQuestion(this);"></div>
-        <div id="voicerdiv" onclick="speechExamplification(this);" ><img id="voicer" src="./Allison.png" height="200px"></div>
-        <ul><li><select id="voice"><option value="en-US_AllisonVoice" selected>Allison</option><option value="en-US_LisaVoice">Lisa</option><option value="en-US_MichaelVoice">Michael</option></select></li></ul>
+        <div id="voicerdiv" onclick="speechExamplification(this);" ><img id="voicer" src="" title= "" height="200px"></div>
+        <ul><li><select id="voice">
+        </select></li></ul>
         <ul style="display:none;"><li><audio id="englishspeech" src="" controls autoplay></audio></li></ul>
 	
 	<button id='recordingstart' onclick="startRecording(this);">録音スタート</button>
@@ -124,6 +155,7 @@ $(function(){
 		recorder && recorder.exportWAV(function(blob) {
 			var fd = new FormData();
 			fd.append( 'data', blob );
+			fd.append( 'lang', lang );
 			$.ajax({
 				type: 'POST',
 				url: './s2t',

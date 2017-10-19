@@ -2,9 +2,13 @@
 
 ## Overview
 
-Watson would be your English pronounciation teacher.
+Watson would be your Language pronounciation teacher.
 
 ## Reference
+
+https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/
+
+https://www.ibm.com/watson/developercloud/text-to-speech/api/v1/
 
 http://labs.irohasoft.com/webaudio/chrome/
 

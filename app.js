@@ -14,16 +14,18 @@ var speech_to_text = new s2t({ username: settings.s2t_username, password: settin
 var text_to_speech = new t2s({ username: settings.t2s_username, password: settings.t2s_password });
 var appEnv = cfenv.getAppEnv();
 
+var lang = settings.lang ? settings.lang : 'en';
+
 app.use( multer( { dest: './tmp/' } ).single( 'data' ) );
 app.use( bodyParser.urlencoded( { extended: true } ) );
 app.use( bodyParser.json() );
 app.use( express.static( __dirname + '/public' ) );
 
 app.get( '/', function( req, res ){
-  var questions = settings.questions;
+  var questions = settings.questions[lang];
 
   var template = fs.readFileSync( __dirname + '/public/index.ejs', 'utf-8' );
-  res.write( ejs.render( template, { questions: questions} ) );
+  res.write( ejs.render( template, { lang: lang, questions: questions} ) );
   res.end();
 });
 
@@ -31,15 +33,21 @@ app.post( '/s2t', function( req, res ){
   //. https://www.ibm.com/watson/developercloud/speech-to-text/api/v1/?node#recognize_sessionless_nonmp12
   //. req.file.path に audio/wav
   var filepath = req.file.path;
+  var model = 'en-US_BroadbandModel';
+  if( lang == 'ja' ){
+    model = 'ja-JP_BroadbandModel';
+  }
 
   var params = {
     audio: fs.createReadStream( filepath ),
     content_type: 'audio/wav',
+    model: model,
     timestamps: true
   };
+console.log( params );
   speech_to_text.recognize( params, function( error, result ){
     if( error ){
-      res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
+      res.write( JSON.stringify( { status: false, error: error }, 2, null ) );
       res.end();
     }else{
       //console.log( JSON.stringify(result,2,null) );
@@ -87,7 +95,7 @@ app.post( '/s2t', function( req, res ){
           transcript += ( " " + t );
         }
       }
-      res.write( JSON.stringify( { status: 'ok', result: transcript }, 2, null ) );
+      res.write( JSON.stringify( { status: true, result: transcript }, 2, null ) );
       res.end();
     }
     fs.unlink( filepath, function(e){} );
@@ -107,11 +115,23 @@ app.get( '/t2s', function( req, res ){
 
   text_to_speech.synthesize( params )
   .on( 'error', function( error ){
-    res.write( JSON.stringify( { status: 'ng', error: error }, 2, null ) );
+    res.write( JSON.stringify( { status: false, error: error }, 2, null ) );
     res.end();
   }).on( 'response', function( response1 ){
     res.writeHead( 200, { 'Content-Type': 'audio/wav' } );
   }).pipe( res );
+});
+
+app.get( '/voices', function( req, res ){
+  text_to_speech.voices( null, function( error, voices ){
+    if( error ){
+      res.write( JSON.stringify( { status: false, error: error }, 2, null ) );
+      res.end();
+    }else{
+      res.write( JSON.stringify( { status: true, voices: voices }, 2, null ) );
+      res.end();
+    }
+  });
 });
 
 app.post( '/compare', function( req, res ){
@@ -169,7 +189,7 @@ app.post( '/compare', function( req, res ){
   console.log( 'a_count = ' + a_count + ', as.length = ' + as.length );
   console.log( ' score = ' + score );
 
-  res.write( JSON.stringify( { status: 'ok', score: score }, 2, null ) );
+  res.write( JSON.stringify( { status: true, score: score }, 2, null ) );
   res.end();
 });
 
