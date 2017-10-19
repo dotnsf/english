@@ -96,12 +96,7 @@ $(function(){
         <hr/>
 	
 	<h3>認識結果</h3>
-        <table border="1">
-        <tr><td>認識したテキスト</td>
-	<td id="recognizedresult">&nbsp;</td></tr>
-        <tr><td>スコア</td>
-	<td id="score">&nbsp;</td></tr>
-        </table>
+	<ul id="recognizedresult">&nbsp;</ul>
 
 	<h3>Status</h3>
 	<pre id="log"></pre>
@@ -165,9 +160,10 @@ $(function(){
 			}).done( function( result ){
                                 var data = JSON.parse( result );
                                 console.log( data.result );
-                                $('#recognizedresult').html( data.result );
+                                $('#recognizedresult').html( '"' + data.result + '"' );
                                 $('#speech').attr( 'disabled', false );
 
+/*
 			        $.ajax({
         				type: 'POST',
         				url: './compare',
@@ -177,6 +173,8 @@ $(function(){
                                      console.log( data1 );
                                      $('#score').html( data1.score );
                                 });
+*/
+
 /*
 			var url = URL.createObjectURL(blob);
 			var li = document.createElement('li');
