@@ -118,13 +118,14 @@ $(function(){
         <ul><li><select id="voice">
         </select></li></ul>
         <ul style="display:none;"><li><audio id="englishspeech" src="" controls autoplay></audio></li></ul>
-	
-	<button id='recordingstart' onclick="startRecording(this);">録音スタート</button>
-	<button id='recordingstop' onclick="stopRecording(this);" disabled>停止</button>
 
         <hr/>
 	
 	<h3>認識結果</h3>
+	
+	<button id='recordingstart' onclick="startRecording(this);"style="display: block;">録音スタート</button>
+	<button id='recordingstop' onclick="stopRecording(this);" style="display: none;">停止</button>
+
         <table border="0">
         <tr>
         <td><img src="./man.png"/></td>
@@ -153,15 +154,15 @@ $(function(){
 
 	function startRecording(button){
 		recorder && recorder.record();
-		button.disabled = true;
-		button.nextElementSibling.disabled = false;
+                $('#recordingstart').css( 'display', 'none' );
+                $('#recordingstop').css( 'display', 'block' );
 		__log('Recording...');
 	}
 
 	function stopRecording(button){
 		recorder && recorder.stop();
-		button.disabled = true;
-		button.previousElementSibling.disabled = false;
+                $('#recordingstart').css( 'display', 'block' );
+                $('#recordingstop').css( 'display', 'none' );
 		__log('Stopped recording.');
 		
 		sendRecordData();

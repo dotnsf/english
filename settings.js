@@ -19,6 +19,13 @@ exports.questions = {
     'Wir mogen Bier!',
     'Wie kann ich nach Berlin kommen?'
   ],
+  'pt': [
+    'Hola',
+    'te amo',
+    'Me puso nervioso.',
+    'Amamos el futbol',
+    '?Como puedo llegar a Lisboa?'
+  ],
   'ja': [
     'おはようございます',
     'こんにちは',

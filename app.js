@@ -14,7 +14,11 @@ var speech_to_text = new s2t({ username: settings.s2t_username, password: settin
 var text_to_speech = new t2s({ username: settings.t2s_username, password: settings.t2s_password });
 var appEnv = cfenv.getAppEnv();
 
-var lang = settings.lang ? settings.lang : 'en';
+var lang = settings.lang ? settings.lang : ( process.argv.length > 1 ? process.argv[2] : 'en' );
+if( !settings.questions[lang] ){
+  lang = 'en';
+}
+console.log( 'lang = ' + lang );
 
 app.use( multer( { dest: './tmp/' } ).single( 'data' ) );
 app.use( bodyParser.urlencoded( { extended: true } ) );
