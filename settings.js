@@ -26,6 +26,27 @@ exports.questions = {
     'Amamos el futbol',
     '?Como puedo llegar a Lisboa?'
   ],
+  'it': [
+    'Ciao',
+    'ti amo',
+    'Mi ha reso nervoso.',
+    'Ci piace il calcio.',
+    'Come posso arrivare a Roma?'
+  ],
+  'fr': [
+    'Bonjour',
+    'je t\'aime',
+    'Cela m\'a rendu nerveux.',
+    'Nous aimons le football.',
+    'Comment puis-je me rendre a Paris?'
+  ],
+  'es': [
+    'Hola.',
+    'te quiero.',
+    'Me puso nervioso.',
+    'Amamos el futbol',
+    '?Como puedo llegar a Madrid?'
+  ],
   'ja': [
     'おはようございます',
     'こんにちは',
