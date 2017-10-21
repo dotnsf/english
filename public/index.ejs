@@ -196,6 +196,7 @@ $(function(){
 			}).done( function( result ){
                                 var data = JSON.parse( result );
                                 console.log( data.result );
+                                if( data.result == null || data.result.length == 0 ){ data.result = '???'; }
                                 $('#recognizedresult').html( data.result );
                                 $('#recognizedresult').addClass( 'balloon1' );
                                 $('#speech').attr( 'disabled', false );
