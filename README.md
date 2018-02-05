@@ -2,7 +2,7 @@
 
 ## Overview
 
-Watson would be your Language pronounciation teacher.
+IBM Watson would be your Language pronounciation teacher.
 
 ## Reference
 
