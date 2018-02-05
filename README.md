@@ -18,4 +18,4 @@ This code is licensed under MIT.
 
 ## Copyright
 
-2017-2018 [K.Kimura @ Juge.Me](https://github.com/dotnsf) and [Yurie.S](https://github.com/yuriette16) all rights reserved.
+2017-2018  [K.Kimura @ Juge.Me](https://github.com/dotnsf) and [Yurie.S](https://github.com/yuriette16) all rights reserved.
